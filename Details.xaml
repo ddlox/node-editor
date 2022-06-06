@@ -1,0 +1,761 @@
+﻿<UserControl x:Class="SG_Administrator.Details"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="1500" d:DesignWidth="300"
+             xmlns:local="clr-namespace:SG_Administrator">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <!-- Create an EXPAND and COLLAPSE for the control -->
+            <Storyboard x:Key="expand_smart3sourceedit" Completed="expanddetailsedit_storyboardcompleted">
+                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="smart3inputsourcedetails" Storyboard.TargetProperty="(FrameworkElement.Height)">
+                    <SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="90"/>
+                </DoubleAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="smart3inputsourcedetails" Storyboard.TargetProperty="(UIElement.Visibility)">
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000" Value="{x:Static Visibility.Visible}"/>
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+            <Storyboard x:Key="collapse_smart3sourceedit" Completed="collapsedetailsedit_storyboardcompleted">
+                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="smart3inputsourcedetails" Storyboard.TargetProperty="(FrameworkElement.Height)">
+                    <SplineDoubleKeyFrame KeyTime="00:00:00" Value="90"/>
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
+                </DoubleAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="smart3inputsourcedetails" Storyboard.TargetProperty="(UIElement.Visibility)">
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000" Value="{x:Static Visibility.Visible}"/>
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+            <!-- Create an EXPAND and COLLAPSE for the control -->
+            <Storyboard x:Key="expand_smart3destinationedit" Completed="expanddetailsedit_storyboardcompleted">
+                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="smart3destinationdetails" Storyboard.TargetProperty="(FrameworkElement.Height)">
+                    <SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="475"/>
+                </DoubleAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="smart3destinationdetails" Storyboard.TargetProperty="(UIElement.Visibility)">
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000" Value="{x:Static Visibility.Visible}"/>
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+            <Storyboard x:Key="collapse_smart3destinationedit" Completed="collapsedetailsedit_storyboardcompleted">
+                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="smart3destinationdetails" Storyboard.TargetProperty="(FrameworkElement.Height)">
+                    <SplineDoubleKeyFrame KeyTime="00:00:00" Value="155"/>
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
+                </DoubleAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="smart3destinationdetails" Storyboard.TargetProperty="(UIElement.Visibility)">
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000" Value="{x:Static Visibility.Visible}"/>
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+            <!-- Create an EXPAND and COLLAPSE for the control -->
+            <Storyboard x:Key="expand_cyclonedestinationedit" Completed="expanddetailsedit_storyboardcompleted">
+                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="cyclonedestinationdetails" Storyboard.TargetProperty="(FrameworkElement.Height)">
+                    <SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="155"/>
+                </DoubleAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="cyclonedestinationdetails" Storyboard.TargetProperty="(UIElement.Visibility)">
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000" Value="{x:Static Visibility.Visible}"/>
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+            <Storyboard x:Key="collapse_cyclonedestinationedit" Completed="collapsedetailsedit_storyboardcompleted">
+                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="cyclonedestinationdetails">
+                    <SplineDoubleKeyFrame KeyTime="00:00:00" Value="155"/>
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
+                </DoubleAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="cyclonedestinationdetails" Storyboard.TargetProperty="(UIElement.Visibility)">
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000" Value="{x:Static Visibility.Visible}"/>
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+            <!-- Create an EXPAND and COLLAPSE for the control -->
+            <Storyboard x:Key="expand_selftestsrcedit" Completed="expanddetailsedit_storyboardcompleted">
+                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="selftestsrcdetails" Storyboard.TargetProperty="(FrameworkElement.Height)">
+                    <SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="123"/>
+                </DoubleAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="selftestsrcdetails" Storyboard.TargetProperty="(UIElement.Visibility)">
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000" Value="{x:Static Visibility.Visible}"/>
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>            
+            <Storyboard x:Key="collapse_selftestsrcedit" Completed="collapsedetailsedit_storyboardcompleted">
+                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="selftestsrcdetails">
+                    <SplineDoubleKeyFrame KeyTime="00:00:00" Value="123"/>
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
+                </DoubleAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="selftestsrcdetails" Storyboard.TargetProperty="(UIElement.Visibility)">
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000" Value="{x:Static Visibility.Visible}"/>
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+            <!-- Create an EXPAND and COLLAPSE for the control -->
+            <Storyboard x:Key="expand_xapsourceedit" Completed="expanddetailsedit_storyboardcompleted">
+                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="xapsourcedetails" Storyboard.TargetProperty="(FrameworkElement.Height)">
+                    <SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="175"/>
+                </DoubleAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="xapsourcedetails" Storyboard.TargetProperty="(UIElement.Visibility)">
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000" Value="{x:Static Visibility.Visible}"/>
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+            <Storyboard x:Key="collapse_xapsourceedit" Completed="collapsedetailsedit_storyboardcompleted">
+                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="xapsourcedetails">
+                    <SplineDoubleKeyFrame KeyTime="00:00:00" Value="155"/>
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
+                </DoubleAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="xapsourcedetails" Storyboard.TargetProperty="(UIElement.Visibility)">
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000" Value="{x:Static Visibility.Visible}"/>
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+            <!-- Create an EXPAND and COLLAPSE for the control -->
+            <Storyboard x:Key="expand_xapdestinationedit" Completed="expanddetailsedit_storyboardcompleted">
+                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="xapdestinationdetails" Storyboard.TargetProperty="(FrameworkElement.Height)">
+                    <SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="155"/>
+                </DoubleAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="xapdestinationdetails" Storyboard.TargetProperty="(UIElement.Visibility)">
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000" Value="{x:Static Visibility.Visible}"/>
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+            <Storyboard x:Key="collapse_xapdestinationedit" Completed="collapsedetailsedit_storyboardcompleted">
+                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="xapdestinationdetails">
+                    <SplineDoubleKeyFrame KeyTime="00:00:00" Value="155"/>
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
+                </DoubleAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="xapdestinationdetails" Storyboard.TargetProperty="(UIElement.Visibility)">
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000" Value="{x:Static Visibility.Visible}"/>
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+            <!-- Create an EXPAND and COLLAPSE for the control -->
+            <Storyboard x:Key="expand_cycloneinputsrcedit" Completed="expanddetailsedit_storyboardcompleted">
+                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="cycloneinputsrcdetails" Storyboard.TargetProperty="(FrameworkElement.Height)">
+                    <SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="63"/>
+                </DoubleAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="cycloneinputsrcdetails" Storyboard.TargetProperty="(UIElement.Visibility)">
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000" Value="{x:Static Visibility.Visible}"/>
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+            <Storyboard x:Key="collapse_cycloneinputsrcedit" Completed="collapsedetailsedit_storyboardcompleted">
+                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="cycloneinputsrcdetails">
+                    <SplineDoubleKeyFrame KeyTime="00:00:00" Value="63"/>
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
+                </DoubleAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="cycloneinputsrcdetails" Storyboard.TargetProperty="(UIElement.Visibility)">
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000" Value="{x:Static Visibility.Visible}"/>
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+            <!-- Create an EXPAND and COLLAPSE for the control -->
+            <Storyboard x:Key="expand_switcheredit" Completed="expanddetailsedit_storyboardcompleted">
+                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="switcherdetails" Storyboard.TargetProperty="(FrameworkElement.Height)">
+                    <SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="30"/>
+                </DoubleAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="switcherdetails" Storyboard.TargetProperty="(UIElement.Visibility)">
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000" Value="{x:Static Visibility.Visible}"/>
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+            <Storyboard x:Key="collapse_switcheredit" Completed="collapsedetailsedit_storyboardcompleted">
+                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="(FrameworkElement.Height)" Storyboard.TargetName="switcherdetails">
+                    <SplineDoubleKeyFrame KeyTime="00:00:00" Value="30"/>
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
+                </DoubleAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="switcherdetails" Storyboard.TargetProperty="(UIElement.Visibility)">
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000" Value="{x:Static Visibility.Visible}"/>
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+            <!-- Create an EXPAND and COLLAPSE for the control -->
+            <Storyboard x:Key="expand_abswitcheredit" Completed="expanddetailsedit_storyboardcompleted">
+                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="abswitcherdetails" Storyboard.TargetProperty="(FrameworkElement.Height)">
+                    <SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="60"/>
+                </DoubleAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="abswitcherdetails" Storyboard.TargetProperty="(UIElement.Visibility)">
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000" Value="{x:Static Visibility.Visible}"/>
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+            <Storyboard x:Key="collapse_abswitcheredit" Completed="collapsedetailsedit_storyboardcompleted">
+                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="abswitcherdetails" Storyboard.TargetProperty="(FrameworkElement.Height)">
+                    <SplineDoubleKeyFrame KeyTime="00:00:00" Value="30"/>
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
+                </DoubleAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="abswitcherdetails" Storyboard.TargetProperty="(UIElement.Visibility)">
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000" Value="{x:Static Visibility.Visible}"/>
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+            <!-- Create an EXPAND and COLLAPSE for the control -->
+            <Storyboard x:Key="expand_netnw4srcedit" Completed="expanddetailsedit_storyboardcompleted">
+                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="netnw4srcdetails" Storyboard.TargetProperty="(FrameworkElement.Height)">
+                    <SplineDoubleKeyFrame KeyTime="00:00:00" Value="0"/>
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="90"/>
+                </DoubleAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="netnw4srcdetails" Storyboard.TargetProperty="(UIElement.Visibility)">
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000" Value="{x:Static Visibility.Visible}"/>
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+            <Storyboard x:Key="collapse_netnw4srcedit" Completed="collapsedetailsedit_storyboardcompleted">
+                <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="netnw4srcdetails" Storyboard.TargetProperty="(FrameworkElement.Height)">
+                    <SplineDoubleKeyFrame KeyTime="00:00:00" Value="90"/>
+                    <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
+                </DoubleAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="netnw4srcdetails" Storyboard.TargetProperty="(UIElement.Visibility)">
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00" Value="{x:Static Visibility.Visible}"/>
+                    <DiscreteObjectKeyFrame KeyTime="00:00:00.3000000" Value="{x:Static Visibility.Visible}"/>
+                </ObjectAnimationUsingKeyFrames>
+            </Storyboard>
+            
+            <!-- Here is how you use a contentpresenter -->
+            <Style x:Key="bongoman" TargetType="{x:Type local:Details}">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type local:Details}">
+                            <StackPanel>
+                                <Label>something1</Label>
+                                <ContentPresenter />
+                                <Label>something2</Label>
+                            </StackPanel>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <!--<UserControl.Triggers>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="EditButton" >
+                <BeginStoryboard Storyboard="{StaticResource expand_cycloneinputsrcedit}"/>
+        </EventTrigger>
+    </UserControl.Triggers>-->
+
+    <DockPanel>
+        <Border DockPanel.Dock="Top" BorderThickness="1,5,1,0" CornerRadius="2,2,0,0" >
+            <DockPanel VerticalAlignment="Top" Height="63" >
+                <Border x:Name="generaldetails" DockPanel.Dock="Top" Margin="0,0,0,0" BorderThickness="0,0,0,0" CornerRadius="0,0,0,0" Padding="0,0,0,0" Height="90" Opacity="1" Background="{x:Null}">
+                    <StackPanel Background="{x:Null}" Margin="0,0,0,0" VerticalAlignment="Top">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150*"/>
+                                <ColumnDefinition Width="150*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                                <!--<RowDefinition Height="Auto" MinHeight="30" />-->
+                            </Grid.RowDefinitions>
+
+                            <StackPanel Grid.Row="0" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top" >
+                                <Label  Content="Type:" Target="{Binding ElementName=parttypetextbox, Mode=OneWay}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top" >
+                                <TextBox IsReadOnly="True" TextWrapping="Wrap" x:Name="parttypetextbox" Width="130" Height="22" Margin="5,0,0,0" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top">
+                                <Label Content="Name:" Target="{Binding ElementName=partnametextbox}" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top" >
+                                <TextBox TextWrapping="Wrap" GotFocus="my_tb_gotfocus" LostFocus="my_tb_lostfocus" x:Name="partnametextbox" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partnametextbox_TextChanged" />
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </DockPanel>
+        </Border>
+        <Border DockPanel.Dock="Top" BorderThickness="1,5,1,0" CornerRadius="0,0,0,0" Opacity="1" >
+            <DockPanel VerticalAlignment="Top" >
+                <Border x:Name="cycloneinputsrcdetails" DockPanel.Dock="Top" Margin="0,0,0,0" BorderThickness="0,0,0,0" CornerRadius="0,0,0,0" Padding="0,0,0,0" Height="63" Visibility="Hidden">
+                    <StackPanel Background="{x:Null}" Margin="0,0,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150*"/>
+                                <ColumnDefinition Width="150*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top">
+                                <Label Content="Server Port:" Target="{Binding ElementName=partnameserverport}" ToolTip="Enter a Cyclone server port" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top" >
+                                <TextBox TextWrapping="Wrap" x:Name="partnameserverport" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partnameserverport_TextChanged" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top">
+                                <Label Content="Assign a Service ID:" Target="{Binding ElementName=partnamesvcid}" ToolTip="Use this to assign a service ID to the incoming Cyclone data" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top" >
+                                <TextBox TextWrapping="Wrap" x:Name="partnamesvcid" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partnamesvcid_TextChanged" />
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </DockPanel>
+        </Border>
+        <Border DockPanel.Dock="Top" BorderThickness="1,5,1,0" CornerRadius="0,0,0,0" Opacity="1" >
+            <DockPanel VerticalAlignment="Top" >
+                <Border x:Name="switcherdetails" DockPanel.Dock="Top" Margin="0,0,0,0" BorderThickness="0,0,0,0" CornerRadius="0,0,0,0" Padding="0,0,0,0" Height="30" Visibility="Hidden">
+                    <StackPanel Background="{x:Null}" Margin="0,0,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150*"/>
+                                <ColumnDefinition Width="150*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top">
+                                <Label Content="Discrepancy Time (sec.):" Target="{Binding ElementName=partdiscrepancytime}" ToolTip="A XAP switcher will prioritise any input which sends data within this time. All other input will be considered after." />
+                            </StackPanel>
+                            <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top" >
+                                <TextBox TextWrapping="Wrap" x:Name="partdiscrepancytime" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partdiscrepancytime_TextChanged" />
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </DockPanel>
+        </Border>
+        <Border DockPanel.Dock="Top" BorderThickness="1,5,1,0" CornerRadius="0,0,0,0" Opacity="1" >
+            <DockPanel VerticalAlignment="Top" >
+                <Border x:Name="xapdestinationdetails" DockPanel.Dock="Top" Margin="0,0,0,0" BorderThickness="0,0,0,0" CornerRadius="0,0,0,0" Padding="0,0,0,0" Height="155" Visibility="Hidden">
+                    <StackPanel Background="{x:Null}" Margin="0,0,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150*"/>
+                                <ColumnDefinition Width="150*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Margin="0,0,0,0" Orientation="Vertical" Height="82" VerticalAlignment="Top">
+                                <Label Content="XAP Connection:" />
+                                <Label Content="Host:" Target="{Binding ElementName=partname_xapdst_host}" ToolTip="Enter a host (by IP address or name)" />
+                                <Label Content="Port:" Target="{Binding ElementName=partname_xapdst_port}" ToolTip="Enter a port to connect to" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="0,0,0,0" Orientation="Vertical" Height="82" VerticalAlignment="Top" >
+                                <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="26" VerticalAlignment="Top" />
+                                <TextBox TextWrapping="Wrap" x:Name="partname_xapdst_host" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partname_xapdst_host_TextChanged"/>
+                                <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="8" VerticalAlignment="Top" />
+                                <TextBox TextWrapping="Wrap" x:Name="partname_xapdst_port" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partname_xapdst_port_TextChanged" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top">
+                                <Label Content="Remap outgoing ID to:" Target="{Binding ElementName=partname_xapdst_svcid}" ToolTip="Use this to remap all outgoing XAP service ID(s) to any other. Leave blank for unchanged"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top" >
+                                <TextBox TextWrapping="Wrap" x:Name="partname_xapdst_svcid" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partname_xapdst_svcid_TextChanged" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top">
+                                <Label Content="Act:" ToolTip="Choose which type for this XAP connection to act as" />
+                            </StackPanel>                            
+                            <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,0,0,0">
+                                <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="5" VerticalAlignment="Top" />
+                                <local:RadioButtonExtended x:Name="partname_xapdst_client" GroupName="DstXAPAct" Content="XAP Client" IsCheckedExt="True" Margin="5,0,0,0" Click="partname_xapdst_client_Click"/>
+                                <local:RadioButtonExtended x:Name="partname_xapdst_server" GroupName="DstXAPAct" Content="XAP Server" Margin="5,0,0,0" Click="partname_xapdst_server_Click"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </DockPanel>
+        </Border>
+        <Border DockPanel.Dock="Top" BorderThickness="1,5,1,0" CornerRadius="0,0,0,0" Opacity="1" >
+            <DockPanel VerticalAlignment="Top" >
+                <Border x:Name="xapsourcedetails" DockPanel.Dock="Top" Margin="0,0,0,0" BorderThickness="0,0,0,0" CornerRadius="0,0,0,0" Padding="0,0,0,0" Height="155" Visibility="Hidden">
+                    <StackPanel Background="{x:Null}" Margin="0,0,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150*"/>
+                                <ColumnDefinition Width="150*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Margin="0,0,0,0" Orientation="Vertical" Height="82" VerticalAlignment="Top">
+                                <Label Content="XAP Connection:" />
+                                <Label Content="Host:" Target="{Binding ElementName=partname_xapsrc_host}" ToolTip="Enter a host (by IP address or name)" />
+                                <Label Content="Port:" Target="{Binding ElementName=partname_xapsrc_port}" ToolTip="Enter a port to connect to" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="0,0,0,0" Orientation="Vertical" Height="82" VerticalAlignment="Top" >
+                                <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="26" VerticalAlignment="Top" />
+                                <TextBox TextWrapping="Wrap" x:Name="partname_xapsrc_host" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partname_xapsrc_host_TextChanged"/>
+                                <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="8" VerticalAlignment="Top" />
+                                <TextBox TextWrapping="Wrap" x:Name="partname_xapsrc_port" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partname_xapsrc_port_TextChanged" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top">
+                                <Label Content="Remap incoming ID to:" Target="{Binding ElementName=partname_xapsrc_svcid}" ToolTip="Use this to remap all incoming XAP service ID(s) to any other. Leave blank for unchanged."/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top" >
+                                <TextBox TextWrapping="Wrap" x:Name="partname_xapsrc_svcid" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partname_xapsrc_svcid_TextChanged" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top">
+                                <Label Content="Act:" ToolTip="Choose which type for this XAP connection to act as" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,0,0,0">
+                                <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="5" VerticalAlignment="Top" />
+                                <local:RadioButtonExtended x:Name="partname_xapsrc_client" GroupName="SrcXAPAct" Content="XAP Client" IsCheckedExt="True" Margin="5,0,0,0" Click="partname_xapsrc_client_Click"/>
+                                <local:RadioButtonExtended x:Name="partname_xapsrc_server" GroupName="SrcXAPAct" Content="XAP Server" Margin="5,0,0,0" Click="partname_xapsrc_server_Click"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="3" Orientation="Horizontal" Height="30" VerticalAlignment="Top">
+                                <Label Content="'EndLive' on disconnect:" ToolTip="Automatically generate an 'EndLive' message when a disconnection occurs." />
+                            </StackPanel>
+                            <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Height="30" VerticalAlignment="Top">
+                                <CheckBox x:Name="partname_xapsrc_enableendlive" Margin="5,0,0,0" Content="" Height="22" Checked="partname_xapsrc_Checked" Unchecked="partname_xapsrc_Unchecked" />
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </DockPanel>
+        </Border>
+        <Border DockPanel.Dock="Top" BorderThickness="1,5,1,0" CornerRadius="0,0,0,0" Opacity="1" >
+            <DockPanel VerticalAlignment="Top" >
+                <Border x:Name="selftestsrcdetails" DockPanel.Dock="Top" Margin="0,0,0,0" BorderThickness="0,0,0,0" CornerRadius="0,0,0,0" Padding="0,0,0,0" Height="123" Visibility="Hidden">
+                    <StackPanel Background="{x:Null}" Margin="0,0,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150*"/>
+                                <ColumnDefinition Width="150*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top">
+                                <Label Content="Assign a Service ID:" ToolTip="Use this to assign a service ID to the generated Self-Test message" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top" >
+                                <TextBox TextWrapping="Wrap" x:Name="partnameselftest_svcid" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partnameselftest_svcid_TextChanged" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top">
+                                <Label Content="XAP Type:" ToolTip="Choose a XAP type for this Self-Test source" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top" >
+                                <ComboBox x:Name="partnameselftest_cb_xaptype" Margin="5,0,0,0" Width="130" Height="22" IsEditable="False" 
+                                          SelectionChanged="partnameselftest_cb_xaptype_SelectionChanged" Text="none">
+                                    <ComboBoxItem Name="xaptype0">ebu</ComboBoxItem>
+                                    <ComboBoxItem Name="xaptype1">teletext</ComboBoxItem>
+                                    <ComboBoxItem Name="xaptype2">open</ComboBoxItem>
+                                </ComboBox>
+                            </StackPanel>
+                            <!--<StackPanel Grid.Row="3" Margin="0,0,0,0" Orientation="Vertical" Height="30" VerticalAlignment="Top" Grid.ColumnSpan="2">
+                                <CheckBox x:Name="partnameselftest_chkb" Margin="5,0,0,0" Height="30" Content="Enable SelfTest (XAP TXT):" IsThreeState="False"
+                                        Checked="partnameselftest_chkb_handlecheck" Unchecked="partnameselftest_chkb_handleunchecked" VerticalAlignment="Center" />
+                            </StackPanel>-->
+                            <StackPanel Grid.Row="2" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top">
+                                <Label Content="Foreground Colour:" ToolTip="Choose a colour for this Self-Test source" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top" >
+                                <ComboBox x:Name="partnameselftest_cb_txtfgdcol" Margin="5,0,0,0" Width="130" Height="22" IsEditable="False" 
+                                          SelectionChanged="partnameselftest_cb_txtfgdcol_SelectionChanged" Text="none">
+                                    <ComboBoxItem Name="txtfgcol0">black</ComboBoxItem>
+                                    <ComboBoxItem Name="txtfgcol1">red</ComboBoxItem>
+                                    <ComboBoxItem Name="txtfgcol2">green</ComboBoxItem>
+                                    <ComboBoxItem Name="txtfgcol3">yellow</ComboBoxItem>
+                                    <ComboBoxItem Name="txtfgcol4">blue</ComboBoxItem>
+                                    <ComboBoxItem Name="txtfgcol5">magenta</ComboBoxItem>
+                                    <ComboBoxItem Name="txtfgcol6">cyan</ComboBoxItem>
+                                    <ComboBoxItem Name="txtfgcol7">white</ComboBoxItem>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel Grid.Row="3" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top">
+                                <Label Content="Row Timeout (sec.):" ToolTip="Self-Test will generate XAP row data within this time" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="3" Grid.Column="1" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top" >
+                                <TextBox TextWrapping="Wrap" x:Name="partnameselftest_rowtimeout" Width="130" Height="22" 
+                                         HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partnameselftest_rowtimeout_TextChanged" />
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </DockPanel>
+        </Border>
+        <Border DockPanel.Dock="Top" BorderThickness="1,5,1,0" CornerRadius="0,0,0,0" Opacity="1" >
+            <DockPanel VerticalAlignment="Top" >
+                <Border x:Name="netnw4srcdetails" DockPanel.Dock="Top" Margin="0,0,0,0" BorderThickness="0,0,0,0" CornerRadius="0,0,0,0" Padding="0,0,0,0" Height="90" Visibility="Hidden">
+                    <StackPanel Background="{x:Null}" Margin="0,0,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150*"/>
+                                <ColumnDefinition Width="150*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top">
+                                <Label Content="Server Port:" ToolTip="Enter a Newfor server port" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top" >
+                                <TextBox TextWrapping="Wrap" x:Name="partnamenetnw4_serverport" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partnamenetnw4_serverport_TextChanged" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top">
+                                <Label Content="Assign a Service ID:"  />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top" >
+                                <TextBox TextWrapping="Wrap" x:Name="partnamenetnw4_svcid" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partnamenetnw4_svcid_TextChanged" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Orientation="Horizontal" Height="30" VerticalAlignment="Top" >
+                                <Label Content="Send Ack:" Height="30" VerticalAlignment="Top" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top" >
+                                <CheckBox x:Name="partnamenetnw4_sendack" Content="" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Center"
+	                                        Checked="partnamenetnw4_sendack_Checked" Unchecked="partnamenetnw4_sendack_Unchecked" />
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </DockPanel>
+        </Border>
+        <Border DockPanel.Dock="Top" BorderThickness="1,5,1,0" CornerRadius="0,0,0,0" Opacity="1" >
+            <DockPanel VerticalAlignment="Top" >
+                <Border x:Name="cyclonedestinationdetails" DockPanel.Dock="Top" Margin="0,0,0,0" BorderThickness="0,0,0,0" CornerRadius="0,0,0,0" Padding="0,0,0,0" Height="155" Visibility="Hidden">
+                    <StackPanel Background="{x:Null}" Margin="0,0,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150*"/>
+                                <ColumnDefinition Width="150*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Margin="0,0,0,0" Orientation="Vertical" Height="142" VerticalAlignment="Top">
+                                <Label Content="TCP Client Conn. To:" />
+                                <Label Content="Host:" Target="{Binding ElementName=partname_cyclonedst_host}" />                                
+                                <Label Content="Port:" Target="{Binding ElementName=partname_cyclonedst_port}" />
+                                <Label Content="Language:" Target="{Binding ElementName=partname_cyclonedst_cb_lang}" />
+                                <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="10" VerticalAlignment="Top" />
+                                <Label Content="Ignore service(s) with ID:" Target="{Binding ElementName=partname_cyclonedst_discard_ids}" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Margin="0,0,0,0" Orientation="Vertical" Height="142" VerticalAlignment="Top" >
+                                <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="26" VerticalAlignment="Top" />
+                                <TextBox TextWrapping="Wrap" x:Name="partname_cyclonedst_host" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partname_cyclonedst_host_TextChanged"/>
+                                <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="8" VerticalAlignment="Top" />
+                                <TextBox TextWrapping="Wrap" x:Name="partname_cyclonedst_port" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partname_cyclonedst_port_TextChanged" />
+                                <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top" >
+                                    <ComboBox x:Name="partname_cyclonedst_cb_lang" Margin="5,0,0,0" Width="130" Height="22" IsEditable="False" 
+                                          SelectionChanged="partname_cyclonedst_cb_lang_SelectionChanged" Text="none">
+                                        <ComboBoxItem Name="cyclang0">english</ComboBoxItem>
+                                        <ComboBoxItem Name="cyclang1">deutsch</ComboBoxItem>
+                                        <ComboBoxItem Name="cyclang2">swedish</ComboBoxItem>
+                                        <ComboBoxItem Name="cyclang3">italian</ComboBoxItem>
+                                        <ComboBoxItem Name="cyclang4">french</ComboBoxItem>
+                                        <ComboBoxItem Name="cyclang5">spanish</ComboBoxItem>
+                                        <ComboBoxItem Name="cyclang6">czech</ComboBoxItem>
+                                        <ComboBoxItem Name="cyclang7">arabic</ComboBoxItem>
+                                        <ComboBoxItem Name="cyclang8">russian</ComboBoxItem>
+                                        <ComboBoxItem Name="cyclang9">estonian</ComboBoxItem>
+                                        <ComboBoxItem Name="cyclang10">latvian</ComboBoxItem>
+                                        <ComboBoxItem Name="cyclang11">polish</ComboBoxItem>
+                                        <ComboBoxItem Name="cyclang12">romanian</ComboBoxItem>
+                                        <ComboBoxItem Name="cyclang13">serbian</ComboBoxItem>
+                                        <ComboBoxItem Name="cyclang14">croatian</ComboBoxItem>
+                                        <ComboBoxItem Name="cyclang15">turkish</ComboBoxItem>
+                                        <ComboBoxItem Name="cyclang16">ukrainian</ComboBoxItem>
+                                        <ComboBoxItem Name="cyclang17">greek</ComboBoxItem>
+                                        <ComboBoxItem Name="cyclang18">hebrew</ComboBoxItem>
+                                    </ComboBox>
+                                </StackPanel>
+                                <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="8" VerticalAlignment="Top" />
+                                <TextBox TextWrapping="Wrap" x:Name="partname_cyclonedst_discard_ids" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partname_cyclonedst_discard_ids_TextChanged" />
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </DockPanel>
+        </Border>
+        <Border DockPanel.Dock="Top" BorderThickness="1,5,1,0" CornerRadius="0,0,0,0" Opacity="1" >
+            <DockPanel VerticalAlignment="Top" >
+                <Border x:Name="smart3destinationdetails" DockPanel.Dock="Top" Margin="0,0,0,0" BorderThickness="0,0,0,0" CornerRadius="0,0,0,0" Padding="0,0,0,0" Height="460" Visibility="Hidden">
+                    <StackPanel Background="{x:Null}" Margin="0,0,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150*"/>
+                                <ColumnDefinition Width="150*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top">
+                                <Label Content="Transport:" ToolTip="Choose TCP Client for network communication otherwise choose serial" />
+                            </StackPanel>
+							<StackPanel Grid.Column="1" Margin="0,0,0,0">
+                                <local:RadioButtonExtended x:Name="partname_smart3dst_tcp_client" GroupName="DestSmart3Transport" Content="TCP Client" IsCheckedExt="True" Margin="5,0,0,0" Click="partname_smart3dst_tcpclient_Click"/>
+                                <local:RadioButtonExtended x:Name="partname_smart3dst_serial" GroupName="DestSmart3Transport" Content="Serial Comms" Margin="5,0,0,0" Click="partname_smart3dst_serial_Click" IsEnabled="False" IsHitTestVisible="False"/>
+							</StackPanel>
+							<StackPanel Grid.Row="1" Margin="0,0,0,0" Orientation="Vertical" Height="80" VerticalAlignment="Top">
+                                <Label Content="TCP Connection To:" />
+                                <Label Content="Host:" Target="{Binding ElementName=partname_smart3dst_host}" />
+                                <Label Content="Port:" Target="{Binding ElementName=partname_smart3dst_tcp_port}" />
+                            </StackPanel>
+							<StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,0,0" Orientation="Vertical" Height="80" VerticalAlignment="Top">
+                                <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="26" VerticalAlignment="Top" />
+                                <TextBox TextWrapping="Wrap" x:Name="partname_smart3dst_host" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partname_smart3dst_host_TextChanged"/>
+                                <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="8" VerticalAlignment="Top" />
+                                <TextBox TextWrapping="Wrap" x:Name="partname_smart3dst_tcp_port" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partname_smart3dst_tcp_port_TextChanged" />
+							</StackPanel>
+							<StackPanel Grid.Row="2" Margin="0,0,0,0" Orientation="Vertical" Height="174" VerticalAlignment="Top">
+                                <Label Content="Serial Communications:" />
+                                <Label Content="Port:" Target="{Binding ElementName=partname_smart3dst_serial_port}" Height="22" Padding="5,0"/>
+                                <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="8" VerticalAlignment="Top" />
+                                <Label Content="Baud Rate:" Target="{Binding ElementName=partname_smart3dst_baud}" Height="22" Padding="5,0"/>
+                                <StackPanel Margin="0,0,0,5" Orientation="Horizontal" Height="8" VerticalAlignment="Top" />
+                                <Label Content="Parity:" Target="{Binding ElementName=partname_smart3dst_parity}" Height="22" Padding="5,0"/>
+                                <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="5" VerticalAlignment="Top" />
+                                <Label Content="Data Bits:" Target="{Binding ElementName=partname_smart3dst_databits}" Height="22" Padding="5,0"/>
+                                <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="8" VerticalAlignment="Top" />
+                                <Label Content="Stop Bits:" Target="{Binding ElementName=partname_smart3dst_stopbits}" Height="22" Padding="5,0"/>
+                            </StackPanel>
+							<StackPanel Grid.Row="2" Grid.Column="1" Margin="0,0,0,0" Orientation="Vertical" Height="174" VerticalAlignment="Top">
+                                <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="26" VerticalAlignment="Top" />
+                                <TextBox TextWrapping="Wrap" x:Name="partname_smart3dst_serial_port" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partname_smart3dst_serial_port_TextChanged" IsEnabled="False" IsHitTestVisible="False"/>
+                                <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="8" VerticalAlignment="Top" />
+                                <TextBox TextWrapping="Wrap" x:Name="partname_smart3dst_baud" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partname_smart3dst_baud_TextChanged" IsEnabled="False" IsHitTestVisible="False"/>
+                                <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="8" VerticalAlignment="Top" />
+                                <TextBox TextWrapping="Wrap" x:Name="partname_smart3dst_parity" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partname_smart3dst_parity_TextChanged" IsEnabled="False" IsHitTestVisible="False"/>
+                                <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="8" VerticalAlignment="Top" />
+                                <TextBox TextWrapping="Wrap" x:Name="partname_smart3dst_databits" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partname_smart3dst_databits_TextChanged" IsEnabled="False" IsHitTestVisible="False"/>
+                                <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="8" VerticalAlignment="Top" />
+                                <TextBox TextWrapping="Wrap" x:Name="partname_smart3dst_stopbits" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partname_smart3dst_stopbits_TextChanged" IsEnabled="False" IsHitTestVisible="False"/>
+                            </StackPanel>
+							<StackPanel Grid.Row="3" Margin="0,0,0,0" Orientation="Vertical" Height="22" VerticalAlignment="Top">
+                                <Label Content="Initial Encoder Set up:" />
+							</StackPanel>
+							<StackPanel Grid.Row="4" Margin="0,0,0,0" Orientation="Vertical" Height="120" VerticalAlignment="Top">
+                                <Label Margin="0,0,0,0" Padding="5,0,0,0" Content="Default Mode:" ToolTip="Choose the mode the encoder should start with" Height="22" VerticalAlignment="Top"  />
+                                <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="8" VerticalAlignment="Top" />
+                                <Label Margin="0,0,0,0" Padding="5,0,0,0" Content="RealTime Rows:" Target="{Binding ElementName=partname_smart3dst_real_time_rows}" Height="22" VerticalAlignment="Top" />
+                                <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="8" VerticalAlignment="Top" />
+                                <Label Margin="0,0,0,0" Padding="5,0,0,0" Content="RealTime Base Row:" Target="{Binding ElementName=partname_smart3dst_real_time_baserow}" Height="22" VerticalAlignment="Top" />
+                                <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="8" VerticalAlignment="Top" />
+                                <Label Margin="0,0,0,0" Padding="5,0,0,0" Content="User Defined Mode:" Target="{Binding ElementName=partname_smart3dst_user_defined_mode}" Height="22" VerticalAlignment="Top" />
+							</StackPanel>
+							<StackPanel Grid.Row="4" Grid.Column="1" Margin="0,0,0,0" Orientation="Vertical" Height="120" VerticalAlignment="Top">
+                                <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="22" VerticalAlignment="Top" >
+                                    <ComboBox x:Name="partname_smart3dst_cb_default_mode" Margin="5,0,0,0" Width="130" Height="22" IsEditable="False" 
+                                          SelectionChanged="partname_smart3dst_cb_default_mode_SelectionChanged" Text="none">
+                                        <ComboBoxItem Name="l21defaultmode0">regen</ComboBoxItem>
+                                        <ComboBoxItem Name="l21defaultmode1">passthru</ComboBoxItem>
+                                        <ComboBoxItem Name="l21defaultmode2">realtime</ComboBoxItem>
+                                        <ComboBoxItem Name="l21defaultmode3">userdefined</ComboBoxItem>
+									</ComboBox>
+								</StackPanel>
+                                <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="8" VerticalAlignment="Top" />
+                                <TextBox TextWrapping="Wrap" x:Name="partname_smart3dst_real_time_rows" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partname_smart3dst_real_time_rows_TextChanged" />
+                                <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="8" VerticalAlignment="Top" />
+                                <TextBox TextWrapping="Wrap" x:Name="partname_smart3dst_real_time_baserow" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partname_smart3dst_real_time_baserow_TextChanged" />
+                                <StackPanel Margin="0,0,0,0" Orientation="Horizontal" Height="8" VerticalAlignment="Top" />
+                                <TextBox TextWrapping="Wrap" x:Name="partname_smart3dst_user_defined_mode" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partname_smart3dst_user_defined_mode_TextChanged" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="5" Margin="0,0,0,0" Orientation="Vertical" Height="22" VerticalAlignment="Top" Grid.ColumnSpan="2">
+                                <CheckBox x:Name="partname_smart3dst_removetopbit_chkb" Margin="5,0,0,0" Height="22" Content="Remove Top Bit" IsThreeState="False"
+                                        Checked="partname_smart3dst_removetopbit_chkb_handlecheck" Unchecked="partname_smart3dst_removetopbit_chkb_handleunchecked" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </DockPanel>
+        </Border>
+        <Border DockPanel.Dock="Top" BorderThickness="1,5,1,0" CornerRadius="0,0,0,0" Opacity="1" >
+            <DockPanel VerticalAlignment="Top" >
+                <Border x:Name="abswitcherdetails" DockPanel.Dock="Top" Margin="0,0,0,0" BorderThickness="0,0,0,0" CornerRadius="0,0,0,0" Padding="0,0,0,0" Height="60" Visibility="Hidden">
+                    <StackPanel Background="{x:Null}" Margin="0,0,0,0">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150*"/>
+                                <ColumnDefinition Width="150*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top">
+                                <Label Content="Discrepancy Time (ms):" Target="{Binding ElementName=partabdiscrepancytime}" ToolTip="A XAP ABSwitcher will allow two inputs to be slightly out of sync by this amount of time before considering them for switching." />
+                            </StackPanel>
+                            <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top" >
+                                <TextBox x:Name="partabdiscrepancytime" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="abpartdiscrepancytime_TextChanged" MaxLength="5" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top">
+                                <Label Content="Master Rcv Timeout (ms):" Target="{Binding ElementName=partabmasterreceivetimeout}" ToolTip="A XAP ABSwitcher will wait for this amount of time before making a decision to switch from the A input to the B input based on the content of the preload data." />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top" >
+                                <TextBox x:Name="partabmasterreceivetimeout" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="abpartmasterreceivetimeout_TextChanged" MaxLength="5" />
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </DockPanel>
+        </Border>
+        <Border DockPanel.Dock="Top" BorderThickness="1,5,1,0" CornerRadius="0,0,0,0" Opacity="1" >
+            <DockPanel VerticalAlignment="Top" >
+                <Border x:Name="smart3inputsourcedetails" DockPanel.Dock="Top" Margin="0,0,0,0" BorderThickness="0,0,0,0" CornerRadius="0,0,0,0" Padding="0,0,0,0" Height="90" Visibility="Hidden">
+                    <StackPanel Background="{x:Null}" Margin="0,0,0,0" >
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150*"/>
+                                <ColumnDefinition Width="150*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                                <RowDefinition Height="Auto" MinHeight="30" />
+                            </Grid.RowDefinitions>
+                            <StackPanel Grid.Row="0" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top">
+                                <Label Content="Server Port:" Target="{Binding ElementName=partsmart3inserverport}" ToolTip="An input TCP server port to receive incoming Smart3 protocol data." />
+                            </StackPanel>
+                            <StackPanel Grid.Row="0" Grid.Column="1" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top" >
+                                <TextBox x:Name="partname_smart3src_serverport" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partname_smart3src_serverport_TextChanged" MaxLength="5" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top">
+                                <Label Content="CDP Framerate:" ToolTip="A selection of frame rates for CDP transmission." />
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top" >
+                                <ComboBox x:Name="partname_smart3src_framerate_cb" Margin="5,0,0,0" Width="135" Height="22" IsEditable="False" 
+                                          SelectionChanged="partname_smart3src_framerate_cb_SelectionChanged" Text="none">
+                                    <ComboBoxItem Name="cdpframerate1">23.976 FPS (24000/1001)</ComboBoxItem>
+                                    <ComboBoxItem Name="cdpframerate2">24 FPS</ComboBoxItem>
+                                    <ComboBoxItem Name="cdpframerate3">25 FPS</ComboBoxItem>
+                                    <ComboBoxItem Name="cdpframerate4">29.970 FPS (30000/1001)</ComboBoxItem>
+                                    <ComboBoxItem Name="cdpframerate5">30 FPS</ComboBoxItem>
+                                    <ComboBoxItem Name="cdpframerate6">50 FPS</ComboBoxItem>
+                                    <ComboBoxItem Name="cdpframerate7">59.940 FPS (60000/1001)</ComboBoxItem>
+                                    <ComboBoxItem Name="cdpframerate8">60 FPS</ComboBoxItem>
+                                </ComboBox>
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top">
+                                <Label Content="Assign a Service ID:" ToolTip="Use this to assign a service ID to the incoming Smart 3 data" />
+                            </StackPanel>
+                            <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,0,0,0" Orientation="Horizontal" Height="30" VerticalAlignment="Top" >
+                                <TextBox TextWrapping="Wrap" x:Name="partname_smart3src_svcid" Width="130" Height="22" HorizontalAlignment="Left" Margin="5,0,0,0" TextChanged="partname_smart3src_svcid_TextChanged" />
+                            </StackPanel>
+
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </DockPanel>
+        </Border>    
+    </DockPanel>
+</UserControl>

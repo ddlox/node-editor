@@ -1,0 +1,15 @@
+﻿<ContentControl x:Class="SG_Administrator.DesignerItem"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300"
+             xmlns:demo="clr-namespace:SG_Administrator">
+            <!--<StackPanel>--> <!--x:Name="PART_Host">-->  <!--Background="LightSteelBlue">-->
+                <!--<Canvas>--> <!--x:Name="PART_Hosted_Canvas">-->
+                    <!--<Label Canvas.Top="10" Canvas.Left="20" Width="20" Background="Bisque">jjj</Label>
+                    <Label Canvas.Top="40" Canvas.Left="20" Width="20" Background="Bisque">bbb</Label>-->
+                <!--</Canvas>
+            </StackPanel>-->
+</ContentControl>

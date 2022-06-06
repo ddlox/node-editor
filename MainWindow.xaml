@@ -1,0 +1,1039 @@
+﻿<Window x:Class="SG_Administrator.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:s="clr-namespace:SG_Administrator"         
+        xmlns:c="clr-namespace:SG_Administrator.Controls"
+        xmlns:NetworkUI="clr-namespace:NetworkUI;assembly=NetworkUI"
+        xmlns:NetworkModel="clr-namespace:NetworkModel;assembly=NetworkModel"
+        xmlns:ZoomAndPan="clr-namespace:ZoomAndPan;assembly=ZoomAndPan"
+        xmlns:ac="clr-namespace:AdornedControl;assembly=AdornedControl"
+        WindowStartupLocation="CenterScreen"
+        Title="Subtitle Gateway Administrator - Grass Valley, A Belden Brand"        
+        x:Name="mainWindow"        
+        Height="850" Width="1050"
+        AllowDrop="True"
+        Loaded="MainWindow_Loaded"
+        FocusManager.FocusedElement="{Binding ElementName=networkControl}"
+        Icon="./Resources/Images/app_icon_32x32.png"
+        >
+    
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- 
+                Merge in the resource dictionary that is shared between the main window and the overview window.
+                -->
+                <ResourceDictionary 
+                    Source="SharedVisualTemplates.xaml"
+                    />
+
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="SeparatorStyle10px"
+                 TargetType="{x:Type Border}">
+                <Setter Property="BorderThickness" Value="1,0,0,0"/>
+                <Setter Property="BorderBrush" Value="#FFC5C5C5"/>
+                <Setter Property="Margin" Value="10,0,10,0"/>
+                <Setter Property="Width" Value="2"/>
+                <Setter Property="Background" Value="White"/>
+            </Style>
+            
+            <Style x:Key="SeparatorStyle2px"
+                 TargetType="{x:Type Border}">
+                <Setter Property="BorderThickness" Value="1,0,0,0"/>
+                <Setter Property="BorderBrush" Value="#FFC5C5C5"/>
+                <Setter Property="Margin" Value="2,0,2,0"/>
+                <Setter Property="Width" Value="2"/>
+                <Setter Property="Background" Value="White"/>
+            </Style>
+
+            <!-- UI commands. -->
+
+            <RoutedUICommand x:Key="Commands.DeleteSelectedNodes" />
+            <RoutedUICommand x:Key="Commands.CreateNode" />
+            <RoutedUICommand x:Key="Commands.DeleteNode" />
+            <RoutedUICommand x:Key="Commands.DeleteConnection" />
+            <RoutedUICommand x:Key="Commands.ZoomOut" />
+            <RoutedUICommand x:Key="Commands.ZoomIn" />
+            <RoutedUICommand x:Key="Commands.JumpBackToPrevZoom" />
+            <RoutedUICommand x:Key="Commands.FitContent" />
+            <RoutedUICommand x:Key="Commands.Fill" />
+            <RoutedUICommand x:Key="Commands.OneHundredPercent" />
+            <RoutedUICommand x:Key="Commands.AddInputConnector" />
+            <RoutedUICommand x:Key="Commands.RemoveInputConnector" />
+            <RoutedUICommand x:Key="Commands.AddOutputConnector" />
+            <RoutedUICommand x:Key="Commands.RemoveOutputConnector" />
+            <RoutedUICommand x:Key="Commands.SaveToFile" />
+            <RoutedUICommand x:Key="Commands.OpenFile" />
+            <RoutedUICommand x:Key="Commands.NewFile" />
+            <!-- 
+            This converts from a scale value to a percentage value.
+            It is used to convert the value of 'ContentScale' to the percentage zoom level that is displayed in the UI.
+            -->
+            <s:ScaleToPercentConverter 
+                x:Key="scaleToPercentConverter" 
+                />
+
+            <!-- 
+            This graphic is used to indicate that a connection cannot be made between two particular connectors.        
+            -->
+            <DataTemplate DataType="{x:Type s:ConnectionBadIndicator}">
+                <Grid
+                    Width="80"
+                    >
+                    <Image 
+                        Width="16"
+                        Height="16"
+                        Source="Resources/Images/block_16.png"
+                        HorizontalAlignment="Right"
+                        />
+                </Grid>
+            </DataTemplate>
+
+            <!-- 
+            This graphic is used to indicate that a connection can be made between two particular connectors.        
+            -->
+            <DataTemplate DataType="{x:Type s:ConnectionOkIndicator}">
+                <Grid
+                    Width="80"
+                    >
+                    <Image 
+                        Width="16"
+                        Height="16"
+                        Source="Resources/Images/tick_16.png"
+                        HorizontalAlignment="Right"
+                        />
+                </Grid>
+            </DataTemplate>
+
+            <!-- Enable Flat style on all buttons. The ToolBar class defines a Style that makes Buttons look flat -->
+            <Style BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" TargetType="Button"></Style>
+
+            <!-- 
+            Define the visual style for a 'ConnectorItem'.
+            -->
+            <Style 
+                TargetType="{x:Type NetworkUI:ConnectorItem}"
+                >
+                <!-- 
+                Data-binding for the connector hotspot.
+                ConnectorItem automatically computes its center points and assings this value
+                to the 'Hotspot' property.  This data-binding then 'pushes' the value into the application
+                view-model.
+                -->
+                <Setter 
+                    Property="Hotspot"
+                    Value="{Binding Hotspot, Mode=OneWayToSource}"
+                    />
+
+                <!-- The visual template. -->
+                <Setter 
+                    Property="Template"
+                    >
+                    <Setter.Value>
+                        <ControlTemplate 
+                            TargetType="{x:Type NetworkUI:ConnectorItem}"
+                            >
+                            <!-- The visual for the connector. -->
+                            <Ellipse IsHitTestVisible="True" MouseDown="Ellipse_MouseDown"
+                                Stroke="{StaticResource nodeBorderBrush}"
+                                Fill="{StaticResource connectorBackgroundBrush}"
+                                />
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <!-- 
+            Template for the button that is used to delete nodes and connections in the graph.
+            This button is displayed in an adorner when the user hovers the mouse over a node or connection.
+            -->
+            <ControlTemplate 
+                x:Key="deleteButtonTemplate"
+                TargetType="{x:Type Button}"
+                >
+                <Grid
+                    x:Name="grid"
+                    >
+                    <Grid.RenderTransform>
+                        <ScaleTransform
+                            ScaleX="1"
+                            ScaleY="1"
+                            CenterX="10"
+                            CenterY="10"
+                            />
+                    </Grid.RenderTransform>
+                    <Ellipse
+                        x:Name="shadow"
+                        VerticalAlignment="Stretch"
+                        HorizontalAlignment="Stretch"
+                        Fill="Gray"
+                        >
+                        <Ellipse.RenderTransform>
+                            <TranslateTransform
+                                X="1.5"
+                                Y="1.5"
+                                />
+                        </Ellipse.RenderTransform>
+                    </Ellipse>
+                    <Ellipse
+                        x:Name="ellipse"
+                        Stroke="Red"
+                        VerticalAlignment="Stretch"
+                        HorizontalAlignment="Stretch"
+                        Fill="White"
+                        />
+                    <Image
+                        Source="Resources/Images/scissors.png" 
+                        Margin="2"
+                        />
+                </Grid>
+                <ControlTemplate.Triggers>
+                    <EventTrigger
+                        RoutedEvent="Mouse.MouseEnter"
+                        >
+                        <!-- 
+                        Make the 'delete connection button' larger when the mouse 
+                        cursor is hovered over it.
+                        -->
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+                                    Storyboard.TargetName="grid"
+                                    Storyboard.TargetProperty="RenderTransform.ScaleX"
+                                    To="1.3"
+                                    Duration="0:0:0.25"
+                                    />
+                                <DoubleAnimation
+                                    Storyboard.TargetName="grid"
+                                    Storyboard.TargetProperty="RenderTransform.ScaleY"
+                                    To="1.3"
+                                    Duration="0:0:0.25"
+                                    />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+
+                    <EventTrigger
+                        RoutedEvent="Mouse.MouseLeave"
+                        >
+                        <!-- 
+                        Return the 'delete connection button' to normal size when the mouse
+                        cursor is moved away.
+                        -->
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation
+                                    Storyboard.TargetName="grid"
+                                    Storyboard.TargetProperty="RenderTransform.ScaleX"
+                                    To="1"
+                                    Duration="0:0:0.05"
+                                    />
+                                <DoubleAnimation
+                                    Storyboard.TargetName="grid"
+                                    Storyboard.TargetProperty="RenderTransform.ScaleY"
+                                    To="1"
+                                    Duration="0:0:0.05"
+                                    />
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </ControlTemplate.Triggers>
+
+            </ControlTemplate>
+
+            <!-- 
+            Data-template for ConectionViewModel.
+            
+            Note that the 'Start' and 'End' of the arrow are bound to 'SourceConnectorHotspot' and 'DestConnectorHotspot' in 
+            the view-model.
+
+            In this sample a curved arrow represents connections between nodes.
+            -->
+            <DataTemplate
+                DataType="{x:Type NetworkModel:ConnectionViewModel}"
+                >
+
+                <!-- 
+                An adorned control is used, to represent the connection. 
+                When the user hovers the mouse cursor over the connection, the 
+                'delete connection' adorner pops up and allows them to delete the connection.
+                -->
+                <ac:AdornedControl
+                    HorizontalAdornerPlacement="Mouse"
+                    VerticalAdornerPlacement="Mouse"
+                    IsMouseOverShowEnabled="{Binding ElementName=networkControl, Path=IsNotDragging}"
+                    >
+
+                    <!-- The connection is represented by a curved arrow. -->
+                    <s:CurvedArrow
+                        Stroke="{StaticResource connectionBrush}"
+                        StrokeThickness="2"
+                        Fill="{StaticResource connectionBrush}"
+                        Points="{Binding Points}"
+                        />
+
+                    <ac:AdornedControl.AdornerContent>
+
+                        <!-- 
+                        This is the adorner that pops up when the user hovers the mouse over the connection.
+                        It displays a button that the user can click to delete the connection.
+                        -->
+                        <Canvas
+                            x:Name="connectionAdornerCanvas"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Width="30"
+                            Height="30"
+                            >
+                            <Line
+                                X1="0"
+                                Y1="30"
+                                X2="15"
+                                Y2="15"
+                                Stroke="Black"
+                                StrokeThickness="1"
+                                />
+                            <Button
+                                x:Name="deleteConnectionButton"
+                                Canvas.Left="10"
+                                Canvas.Top="0"
+                                Width="20"
+                                Height="20"
+                                Cursor="Hand"
+                                Focusable="False"
+                                Command="{StaticResource Commands.DeleteConnection}"
+                                CommandParameter="{Binding}"
+                                Template="{StaticResource deleteButtonTemplate}"
+                                />
+                        </Canvas>
+                    </ac:AdornedControl.AdornerContent>
+                </ac:AdornedControl>
+            </DataTemplate>
+
+            <!-- Define a data-template for the 'NodeViewModel' class. -->
+            <DataTemplate DataType="{x:Type NetworkModel:NodeViewModel}">
+
+                <!-- 
+                An adorned control is used, to represent the node. 
+                When the user hovers the mouse cursor over the node, the 
+                'delete node' adorner pops up and allows them to delete the node.
+                -->
+                <ac:AdornedControl
+                    HorizontalAdornerPlacement="Outside"
+                    VerticalAdornerPlacement="Outside"
+                    AdornerOffsetX="-12"
+                    AdornerOffsetY="8"
+                    IsMouseOverShowEnabled="{Binding ElementName=networkControl, Path=IsNotDragging}"
+                    >
+
+                    <!-- The margin has been selected so that the selection rect nicely covers the entire node. -->
+
+                    <Grid
+                        MinWidth="120"
+                        Margin="10,6,10,6"
+                        SizeChanged="Node_SizeChanged"
+                        >
+
+                        <!-- This rectangle is the main visual for the node. -->
+
+                        <Rectangle x:Name="rect_bkg"
+                            Stroke="{StaticResource nodeBorderBrush}"
+                            StrokeThickness="1.3"
+                            RadiusX="4"
+                            RadiusY="4"
+                            Fill="{StaticResource nodeFillBrush}"
+                            />
+
+                        <!-- 
+                        This grid contains the node's connectors.
+                        The margin is negative so that the connectors overlap the body of the node and it's selection border.
+                        -->
+                        <Grid
+                            Margin="-6,4,-6,4"
+                            >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" MinWidth="10" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <!-- spacer -->
+                                <RowDefinition Height="2" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+
+                            <!-- The name of the node. -->
+                            <TextBlock
+                                Grid.Column="0"
+                                Grid.ColumnSpan="3"
+                                Grid.Row="0"
+                                Text="{Binding Name}"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                />
+
+                            <!-- Displays the node's input connectors. -->
+                            <ItemsControl
+                                Grid.Column="0"
+                                Grid.Row="2"
+                                ItemsSource="{Binding InputConnectors}"
+                                ItemTemplate="{StaticResource inputConnectorTemplate}"
+                                Focusable="False"
+                                />
+
+                            <!-- Displays the node's output connectors. -->
+                            <ItemsControl
+                                Grid.Column="2"
+                                Grid.Row="2"
+                                ItemsSource="{Binding OutputConnectors}"
+                                ItemTemplate="{StaticResource outputConnectorTemplate}"
+                                Focusable="False"
+                                />
+                        </Grid>
+                    </Grid>
+
+                    <ac:AdornedControl.AdornerContent>
+
+                        <!-- 
+                        This is the adorner that pops up when the user hovers the mouse over the node.
+                        It displays a button that the user can click to delete the node.
+                        -->
+                        <Canvas
+                            x:Name="nodeAdornerCanvas"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Top"
+                            Width="30"
+                            Height="30"
+                            >
+                            <Line
+                                X1="0"
+                                Y1="30"
+                                X2="15"
+                                Y2="15"
+                                Stroke="Black"
+                                StrokeThickness="1"
+                                />
+                            <Button
+                                x:Name="deleteNodeButton"
+                                Canvas.Left="10"
+                                Canvas.Top="0"
+                                Width="20"
+                                Height="20"
+                                Cursor="Hand"
+                                Focusable="False"
+                                Command="{StaticResource Commands.DeleteNode}"
+                                CommandParameter="{Binding}"
+                                Template="{StaticResource deleteButtonTemplate}"
+                                />
+                        </Canvas>
+                    </ac:AdornedControl.AdornerContent>
+                </ac:AdornedControl>
+
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding Path=HomelyType}">
+                        <DataTrigger.Value>
+                            <NetworkModel:homely_type>e_selftest_source</NetworkModel:homely_type>
+                        </DataTrigger.Value>
+                        <DataTrigger.Setters>
+                            <Setter Property="Fill" Value="{StaticResource nodeDarkKhakiFillBrush}" TargetName="rect_bkg" />
+                        </DataTrigger.Setters>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=HomelyType}">
+                        <DataTrigger.Value>
+                            <NetworkModel:homely_type>e_cyclone_input_source</NetworkModel:homely_type>
+                        </DataTrigger.Value>                    
+                        <DataTrigger.Setters>
+                            <Setter Property="Fill" Value="{StaticResource nodeDarkGreenFillBrush}" TargetName="rect_bkg" />
+                        </DataTrigger.Setters>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=HomelyType}">
+                        <DataTrigger.Value>
+                            <NetworkModel:homely_type>e_net_nw4_source</NetworkModel:homely_type>
+                        </DataTrigger.Value>
+                        <DataTrigger.Setters>
+                            <Setter Property="Fill" Value="{StaticResource nodeDarkOrchidFillBrush}" TargetName="rect_bkg" />
+                        </DataTrigger.Setters>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=HomelyType}">
+                        <DataTrigger.Value>
+                            <NetworkModel:homely_type>e_switcher</NetworkModel:homely_type>
+                        </DataTrigger.Value>
+                        <DataTrigger.Setters>
+                            <Setter Property="Fill" Value="{StaticResource nodeLightBlueFillBrush}" TargetName="rect_bkg" />
+                        </DataTrigger.Setters>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=HomelyType}">
+                        <DataTrigger.Value>
+                            <NetworkModel:homely_type>e_abswitcher</NetworkModel:homely_type>
+                        </DataTrigger.Value>
+                        <DataTrigger.Setters>
+                            <Setter Property="Fill" Value="{StaticResource nodeCornFlowerBlueFillBrush}" TargetName="rect_bkg" />
+                        </DataTrigger.Setters>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=HomelyType}">
+                        <DataTrigger.Value>
+                            <NetworkModel:homely_type>e_splitter</NetworkModel:homely_type>
+                        </DataTrigger.Value>
+                        <DataTrigger.Setters>
+                            <Setter Property="Fill" Value="{StaticResource nodeDarkCyanFillBrush}" TargetName="rect_bkg" />
+                        </DataTrigger.Setters>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=HomelyType}">
+                        <DataTrigger.Value>
+                            <NetworkModel:homely_type>e_aggregator</NetworkModel:homely_type>
+                        </DataTrigger.Value>
+                        <DataTrigger.Setters>
+                            <Setter Property="Fill" Value="{StaticResource nodeDarkGrayFillBrush}" TargetName="rect_bkg" />
+                        </DataTrigger.Setters>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=HomelyType}">
+                        <DataTrigger.Value>
+                            <NetworkModel:homely_type>e_router</NetworkModel:homely_type>
+                        </DataTrigger.Value>
+                        <DataTrigger.Setters>
+                            <Setter Property="Fill" Value="{StaticResource nodeOrangeFillBrush}" TargetName="rect_bkg" />
+                        </DataTrigger.Setters>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=HomelyType}">
+                        <DataTrigger.Value>
+                            <NetworkModel:homely_type>e_xap_destination</NetworkModel:homely_type>
+                        </DataTrigger.Value>
+                        <DataTrigger.Setters>
+                            <Setter Property="Fill" Value="{StaticResource nodeDarkRedFillBrush}" TargetName="rect_bkg" />
+                        </DataTrigger.Setters>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=HomelyType}">
+                        <DataTrigger.Value>
+                            <NetworkModel:homely_type>e_xap_source</NetworkModel:homely_type>
+                        </DataTrigger.Value>
+                        <DataTrigger.Setters>
+                            <Setter Property="Fill" Value="{StaticResource nodeDarkGoldenrodFillBrush}" TargetName="rect_bkg" />
+                        </DataTrigger.Setters>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=HomelyType}">
+                        <DataTrigger.Value>
+                            <NetworkModel:homely_type>e_cyclone_destination</NetworkModel:homely_type>
+                        </DataTrigger.Value>
+                        <DataTrigger.Setters>
+                            <Setter Property="Fill" Value="{StaticResource nodeRosyBrownFillBrush}" TargetName="rect_bkg" />
+                        </DataTrigger.Setters>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=HomelyType}">
+                        <DataTrigger.Value>
+                            <NetworkModel:homely_type>e_smart3_destination</NetworkModel:homely_type>
+                        </DataTrigger.Value>
+                        <DataTrigger.Setters>
+                            <Setter Property="Fill" Value="{StaticResource nodeMediumSlateBlueFillBrush}" TargetName="rect_bkg" />
+                        </DataTrigger.Setters>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding Path=HomelyType}">
+                        <DataTrigger.Value>
+                            <NetworkModel:homely_type>e_smart3_source</NetworkModel:homely_type>
+                        </DataTrigger.Value>
+                        <DataTrigger.Setters>
+                            <Setter Property="Fill" Value="{StaticResource nodeMediumSlateBlueFillBrush}" TargetName="rect_bkg" />
+                        </DataTrigger.Setters>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+
+        </ResourceDictionary>
+
+    </Window.Resources>
+    <Window.InputBindings>
+
+        <!-- Bind input to commands. -->
+
+        <KeyBinding Key="Del" Command="{StaticResource Commands.DeleteSelectedNodes}" />
+        <KeyBinding Key="Minus" Command="{StaticResource Commands.ZoomOut}" />
+        <KeyBinding Key="Plus" Command="{StaticResource Commands.ZoomIn}" />
+        <KeyBinding Gesture="CTRL+Backspace" Command="{StaticResource Commands.JumpBackToPrevZoom}" />
+        <KeyBinding Gesture="CTRL+Space" Command="{StaticResource Commands.FitContent}"/>
+        <KeyBinding Gesture="CTRL+I" Command="{StaticResource Commands.RemoveInputConnector}"/>
+        <KeyBinding Gesture="CTRL+i" Command="{StaticResource Commands.AddInputConnector}"/>
+        <KeyBinding Gesture="CTRL+R" Command="{StaticResource Commands.RemoveOutputConnector}"/>
+        <KeyBinding Gesture="CTRL+r" Command="{StaticResource Commands.AddOutputConnector}"/>
+        <KeyBinding Gesture="CTRL+s" Command="{StaticResource Commands.SaveToFile}"/>
+        <KeyBinding Gesture="CTRL+o" Command="{StaticResource Commands.OpenFile}"/>
+        <KeyBinding Gesture="CTRL+n" Command="{StaticResource Commands.NewFile}"/>
+
+    </Window.InputBindings>
+
+    <Window.CommandBindings>
+
+        <!-- Bind commands to event handlers.-->
+
+        <CommandBinding 
+            Command="{StaticResource Commands.DeleteSelectedNodes}" 
+            Executed="DeleteSelectedNodes_Executed" 
+            />
+        <CommandBinding 
+            Command="{StaticResource Commands.CreateNode}" 
+            Executed="CreateNode_Executed" 
+            />
+        <CommandBinding 
+            Command="{StaticResource Commands.DeleteNode}" 
+            Executed="DeleteNode_Executed" 
+            />
+        <CommandBinding 
+            Command="{StaticResource Commands.DeleteConnection}" 
+            Executed="DeleteConnection_Executed" 
+            />
+        <CommandBinding 
+            Command="{StaticResource Commands.ZoomOut}" 
+            Executed="ZoomOut_Executed" 
+            />
+        <CommandBinding 
+            Command="{StaticResource Commands.ZoomIn}" 
+            Executed="ZoomIn_Executed" 
+            />
+        <CommandBinding 
+            Command="{StaticResource Commands.JumpBackToPrevZoom}" 
+            Executed="JumpBackToPrevZoom_Executed" 
+            CanExecute="JumpBackToPrevZoom_CanExecuted"
+            />
+        <CommandBinding 
+            Command="{StaticResource Commands.FitContent}" 
+            Executed="FitContent_Executed" 
+            />
+        <CommandBinding 
+            Command="{StaticResource Commands.Fill}" 
+            Executed="Fill_Executed" 
+            />
+        <CommandBinding 
+            Command="{StaticResource Commands.OneHundredPercent}" 
+            Executed="OneHundredPercent_Executed" 
+            />
+        <CommandBinding  Command="{StaticResource Commands.AddInputConnector}"  Executed="AddInputConnector_Executed"  />
+        <CommandBinding  Command="{StaticResource Commands.RemoveInputConnector}"  Executed="RemoveInputConnector_Executed"  />
+        <CommandBinding  Command="{StaticResource Commands.AddOutputConnector}"  Executed="AddOutputConnector_Executed"  />
+        <CommandBinding  Command="{StaticResource Commands.RemoveOutputConnector}"  Executed="RemoveOutputConnector_Executed"  />
+        <CommandBinding  Command="{StaticResource Commands.SaveToFile}"  Executed="Save_Executed"  />
+        <CommandBinding  Command="{StaticResource Commands.OpenFile}"  Executed="Open_Executed"  />
+        <CommandBinding  Command="{StaticResource Commands.NewFile}"  Executed="New_Executed"  />
+    </Window.CommandBindings>
+    <!--<Window.ContextMenu>-->
+
+        <!--<ContextMenu x:Key="DesignerCanvasContextMenu">
+            <MenuItem Header="Paste" Command="{x:Static ApplicationCommands.Paste}">
+                <MenuItem.Icon>
+                    <Image Source="Resources/Images/Paste.png" Width="16"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Select All" Command="{x:Static s:DesignerCanvas.SelectAll}"/>
+        </ContextMenu>-->        
+        <!--<ContextMenu>-->
+
+            <!-- Clicking this menu item creates a new node. -->
+
+            <!--<MenuItem
+                Header="Create Node"
+                Command="{StaticResource Commands.CreateNode}"
+                ToolTip="Creates a new node"
+                />
+
+            <Separator />
+
+            <MenuItem
+                Header="Fit"
+                Command="{StaticResource Commands.FitContent}"
+                ToolTip="Fit selected nodes to the viewport, when nothing is selected fits all nodes to the viewport"
+                />
+            <MenuItem Header="Add Input Connector" Command="{StaticResource Commands.AddInputConnector}" ToolTip="Add Input Connector" />
+            <MenuItem Header="Remove Input Connector" Command="{StaticResource Commands.RemoveInputConnector}" ToolTip="Remove Input Connector" />
+            <MenuItem Header="Add Output Connector" Command="{StaticResource Commands.AddOutputConnector}" ToolTip="Add Output Connector" />
+            <MenuItem Header="Remove Output Connector" Command="{StaticResource Commands.RemoveOutputConnector}" ToolTip="Remove Output Connector" />
+
+            <MenuItem
+                Header="Fill"
+                Command="{StaticResource Commands.Fill}"
+                ToolTip="Fit the entire content area to the viewport"
+                />
+            <MenuItem
+                Header="100%"
+                Command="{StaticResource Commands.OneHundredPercent}"
+                ToolTip="Scale the content to 100%"
+                />
+            <MenuItem
+                Header="Previous Zoom"
+                Command="{StaticResource Commands.JumpBackToPrevZoom}"
+                ToolTip="Return to the previous zoom level"
+                />
+
+            <Separator />
+
+            <MenuItem
+                Header="Zoom Out"
+                Command="{StaticResource Commands.ZoomOut}"
+                ToolTip="Zooms out from the canvas"
+                />
+            <MenuItem
+                    Header="Zoom In"
+                    Command="{StaticResource Commands.ZoomIn}"
+                    ToolTip="Zooms in on the canvas"
+                    />
+
+        </ContextMenu>-->
+    <!--</Window.ContextMenu>-->
+    <Window.DataContext>
+        <s:MainWindowViewModel />
+    </Window.DataContext>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!--<ContentControl Content="{StaticResource MyToolbar}"/>-->
+        <StackPanel Orientation="Horizontal" Background="LightSlateGray">            
+            <Button Name="btn_new_cfg" Click="btn_new_cfg_Click" ToolTip="Create New Configuration">
+                <StackPanel Width="24" Height="28" VerticalAlignment="Center">
+                    <Image Source="Resources/Images/GenericDocument.png" Width="16" Height="24"/>
+                </StackPanel>
+            </Button>
+            <Button Name="btn_open_cfg" Click="btn_open_cfg_Click" ToolTip="Open Existing Configuration">
+                <StackPanel Width="24" Height="28" VerticalAlignment="Center">
+                    <Image Source="Resources/Images/OpenFolder.png" Width="16" Height="24"/>
+                </StackPanel>
+            </Button>
+            <Button Name="btn_save_cfg" Click="btn_save_cfg_Click" ToolTip="Save Configuration">
+                <StackPanel Width="24" Height="28" VerticalAlignment="Center">
+                    <Image Source="Resources/Images/Save.png" Width="16" Height="24"/>
+                </StackPanel>
+            </Button>
+            <Border Style="{StaticResource SeparatorStyle10px}"/>
+            <Button Name="btn_open_active_cfg" Click="btn_open_active_cfg_Click" ToolTip="Open Active Configuration">
+                <StackPanel Width="24" Height="28" VerticalAlignment="Center">
+                    <Image Source="Resources/Images/OpenActiveConfig.png" Width="16" Height="24"/>
+                </StackPanel>
+            </Button>
+            <Button Name="btn_save_as_active_cfg" Click="btn_save_as_active_cfg_Click" ToolTip="Save As Active Configuration">
+                <StackPanel Width="24" Height="28" VerticalAlignment="Center">
+                    <Image Source="Resources/Images/SaveAsActiveConfig.png" Width="16" Height="24"/>
+                </StackPanel>
+            </Button>
+            <Border Style="{StaticResource SeparatorStyle10px}"/>
+            <Button Name="btn_startservice_cfg" Click="btn_startservice_cfg_Click" ToolTip="Start Subtitle Gateway Service">
+                <StackPanel Width="24" Height="28" VerticalAlignment="Center">
+                    <Image Source="Resources/Images/StartService.png" Width="16" Height="24"/>
+                </StackPanel>
+            </Button>
+            <Button Name="btn_restartservice_cfg" Click="btn_restartservice_cfg_Click" ToolTip="Restart Subtitle Gateway Service">
+                <StackPanel Width="24" Height="28" VerticalAlignment="Center">
+                    <Image Source="Resources/Images/RestartService.png" Width="16" Height="24"/>
+                </StackPanel>
+            </Button>
+            <Button Name="btn_stopservice_cfg" Click="btn_stopservice_cfg_Click" ToolTip="Stop Subtitle Gateway Service">
+                <StackPanel Width="24" Height="28" VerticalAlignment="Center">
+                    <Image Source="Resources/Images/StopService.png" Width="16" Height="24"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
+        <Grid Grid.Row="1" Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="300"/>
+            </Grid.ColumnDefinitions>
+            <!-- Toolbox -->
+            <StackPanel Grid.Column="0" Margin="0,0,5,0">
+                <!--Expander Header="Sources" Content="{StaticResource FlowChartStencils_Sources}" IsExpanded="True" /-->
+                <Expander Header="Sources" IsExpanded="True" >
+                    <StackPanel>
+                        <Rectangle x:Name="cyclonesrc_rect" MouseLeftButtonDown="Rectangle_MouseLeftButtonDown">
+                            <!--<StackPanel Width="28" Height="28" VerticalAlignment="Center" ToolTip="Cyclone Input Source" >-->
+                                <!--<Image Source="Resources/Images/cyclone_source.png" />-->
+                            <!--</StackPanel>-->
+                        </Rectangle>
+                        <Button>5</Button>
+                        <Button>6</Button>
+                    </StackPanel>
+                </Expander>
+                <Expander Header="Transforms" Content="{StaticResource FlowChartStencils_Transforms}" IsExpanded="True" />
+                <Expander Header="Destinations" Content="{StaticResource FlowChartStencils_Destinations}" IsExpanded="True" />
+            </StackPanel>
+            
+            <!-- GridSplitter -->
+            <GridSplitter Focusable="False" Width="2" Background="LightGray"
+                    VerticalAlignment="Stretch" HorizontalAlignment="Right"/>
+            <!-- Designer -->
+            <GroupBox x:Name="partname_pipeline" Header="Pipeline" Grid.Column="1" Margin="3,0,0,0">
+                <DockPanel>
+                    <!-- Grid placed below the zoom and pan control that contains the zoom slider, zoom label and some buttons. -->
+
+                    <Grid Margin="5,5,5,5" DockPanel.Dock="Bottom">
+                        <Grid.ColumnDefinitions>
+                            <!-- empty space -->
+                            <ColumnDefinition Width="*" />
+
+                            <!-- the fit content button -->
+                            <ColumnDefinition Width="40" />
+
+                            <!-- spacer -->
+                            <ColumnDefinition Width="5" />
+
+                            <!-- the fill button -->
+                            <ColumnDefinition Width="40" />
+
+                            <!-- spacer -->
+                            <ColumnDefinition Width="5" />
+
+                            <!-- the 100% button -->
+                            <ColumnDefinition Width="40" />
+
+                            <!-- spacer -->
+                            <ColumnDefinition Width="5" />
+
+                            <!-- the zoom percentage label -->
+                            <ColumnDefinition Width="25" />
+
+                            <!-- the % symbol -->
+                            <ColumnDefinition Width="15" />
+
+                            <!-- spacer -->
+                            <ColumnDefinition Width="5" />
+
+                            <!-- the zoom out button -->
+                            <ColumnDefinition Width="20" />
+
+                            <!-- spacer -->
+                            <ColumnDefinition Width="5" />
+
+                            <!-- the zoom slider -->
+                            <ColumnDefinition Width="120" />
+
+                            <!-- spacer -->
+                            <ColumnDefinition Width="5" />
+
+                            <!-- the zoom in button -->
+                            <ColumnDefinition Width="20" />
+
+                            <!-- spacer -->
+                            <ColumnDefinition Width="10" />
+
+                            <!-- Add input connector -->
+                            <ColumnDefinition Width="40" />
+                            <ColumnDefinition Width="5" />
+
+                            <!--Remove input connector-->
+                            <ColumnDefinition Width="40" />
+                            <ColumnDefinition Width="5" />
+
+                            <!-- Add output connector -->
+                            <ColumnDefinition Width="40" />
+                            <ColumnDefinition Width="5" />
+
+                            <!--Remove output connector-->
+                            <ColumnDefinition Width="40" />
+                            <ColumnDefinition Width="5" />
+                            
+                            <!-- End -->
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- 
+            The 'fit content' button.  Causes the content to be scaled so that all the graph nodes fit in the viewport.
+            -->
+                        <Button
+                Grid.Column="1"
+                Command="{StaticResource Commands.FitContent}"
+                ToolTip="Fit all nodes to the viewport"
+                >
+                            Fit
+                        </Button>
+
+                        <!-- 
+            The fill button.  Causes the content to be scaled so that it fits in the viewport.
+            -->
+                        <Button
+                Grid.Column="3"
+                Command="{StaticResource Commands.Fill}"
+                ToolTip="Fit the entire content area to the viewport"
+                >
+                            Fill
+                        </Button>
+
+                        <!-- 
+            The 100% button.  Causes the content to be scaled to 100 percent.
+            -->
+                        <Button
+                Grid.Column="5"
+                Command="{StaticResource Commands.OneHundredPercent}"
+                ToolTip="Scale the content to 100%"
+                >
+                            100%
+                        </Button>
+
+                        <!--
+            This is the label that shows what the current zoom level
+            is while zooming in and out.
+            -->
+                        <TextBlock
+                Grid.Column="7"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Right"
+                Text="{Binding ElementName=zoomAndPanControl, Path=ContentScale, Converter={StaticResource scaleToPercentConverter}}"
+                />
+
+                        <TextBlock
+                Grid.Column="8"
+                VerticalAlignment="Center"
+                Text="%"
+                />
+
+                        <!-- Button to zoom out. -->
+                        <Button
+                Grid.Column="10"
+                Command="{StaticResource Commands.ZoomOut}"
+                ToolTip="Zoom out from the content"
+                >
+                            -
+                        </Button>
+
+                        <!-- Slider to change the current zoom level. -->
+                        <Slider
+                Grid.Column="12"
+                Minimum="10" 
+                LargeChange="20" 
+                TickFrequency="10" 
+                Maximum="200" 
+                SmallChange="10" 
+                TickPlacement="TopLeft"
+                Value="{Binding ElementName=zoomAndPanControl, Path=ContentScale, Converter={StaticResource scaleToPercentConverter}}"
+                ToolTip="Change the zoom level of the content"
+                />
+
+                        <!--
+            Button to zoom in.
+            -->
+                        <Button
+                Grid.Column="14"
+                Command="{StaticResource Commands.ZoomIn}"
+                ToolTip="Zoom in on the content"
+                >
+                            +
+                        </Button>
+
+                        <Button x:Name="add_input_connector" Grid.Column="16" Command="{StaticResource Commands.AddInputConnector}" ToolTip="Add input connector">
+                            +I
+                        </Button>
+
+                        <Button x:Name="remove_input_connector" Grid.Column="18" Command="{StaticResource Commands.RemoveInputConnector}" ToolTip="Remove input connector">
+                            -I
+                        </Button>
+
+                        <Button x:Name="add_output_connector" Grid.Column="20" Command="{StaticResource Commands.AddOutputConnector}" ToolTip="Add output connector">
+                            +O
+                        </Button>
+
+                        <Button x:Name="remove_output_connector" Grid.Column="22" Command="{StaticResource Commands.RemoveOutputConnector}" ToolTip="Remove output connector">
+                            -O
+                        </Button>
+                    </Grid>
+                    <ScrollViewer 
+                    CanContentScroll="True" 
+                    HorizontalScrollBarVisibility="Visible"
+                      VerticalScrollBarVisibility="Visible" Focusable="False">
+                        <!--<s:DesignerCanvas Focusable="true" x:Name="MyDesigner"
+                            Background="{StaticResource WindowBackgroundBrush}"
+                            Margin="10" FocusVisualStyle="{x:Null}"
+                            ContextMenu="{StaticResource DesignerCanvasContextMenu}" Width="100" Height="100" >-->
+                        <!-- 
+            The ZoomAndPanControl displays the NetworkView as its content.
+            We can use the mouse to zoom and pan about the NetworkView.
+            -->
+                        <ZoomAndPan:ZoomAndPanControl
+                        x:Name="zoomAndPanControl"
+                        ContentScale="{Binding ContentScale, Mode=TwoWay}"
+                        ContentOffsetX="{Binding ContentOffsetX, Mode=TwoWay}"
+                        ContentOffsetY="{Binding ContentOffsetY, Mode=TwoWay}"
+                        ContentViewportWidth="{Binding ContentViewportWidth, Mode=OneWayToSource}"
+                        ContentViewportHeight="{Binding ContentViewportHeight, Mode=OneWayToSource}"
+                        Background="LightGray"
+                        Focusable="False"
+                        >
+                            <!--                    
+                We need to nest our NetworkView in an AdornerDecorator so that adorners work correct when
+                we zoom in and out using the ZoomAndPanControl
+                -->
+                            <AdornerDecorator>
+                                <!--
+                    This grid specifies the size of the ZoomAndPanControl's content.
+                    It wraps up both the NetworkView and drag-zooming Canvas.
+                    -->
+                                <Grid
+                        Width="{Binding ContentWidth}"
+                        Height="{Binding ContentHeight}"
+                        >
+
+                                    <!-- In this sample the NetworkView is the content displayed by the ZoomAndPanControl. -->
+
+                                    <NetworkUI:NetworkView
+                            x:Name="networkControl"
+                            
+                            NodesSource="{Binding Network.Nodes}"
+                            ConnectionsSource="{Binding Path=Network.Connections}"
+                            
+                            ConnectionDragStarted="networkControl_ConnectionDragStarted"
+                            QueryConnectionFeedback="networkControl_QueryConnectionFeedback"
+                            ConnectionDragging="networkControl_ConnectionDragging"                            
+                            ConnectionDragCompleted="networkControl_ConnectionDragCompleted"
+                            
+                            MouseDown="networkControl_MouseDown"
+                            MouseUp="networkControl_MouseUp"
+                            MouseMove="networkControl_MouseMove"
+                            MouseWheel="networkControl_MouseWheel"
+                            />
+
+                                    <!--
+                        This Canvas and Border are used as a very simple way to render a drag rectangle that the user
+                        uses to specify an area to zoom in on.
+                        -->
+                                    <Canvas
+                            x:Name="dragZoomCanvas"
+                            Visibility="Collapsed"
+                            >
+                                        <Border 
+                                x:Name="dragZoomBorder"
+                                BorderBrush="Black"
+                                BorderThickness="1"
+                                Background="Silver"
+                                CornerRadius="1"
+                                Opacity="0"
+                                />
+                                    </Canvas>
+                                </Grid>
+                            </AdornerDecorator>
+                        </ZoomAndPan:ZoomAndPanControl>
+                        <!--</s:DesignerCanvas>-->
+                    </ScrollViewer>
+                </DockPanel>
+            </GroupBox>
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                 <GroupBox Header="Details" Margin="3,0,0,0">                
+                    <!--<s:Details x:Name="MyDetails" Style="{DynamicResource ResourceKey=bongoman}"> 
+                    </s:Details>-->
+                    <s:Details x:Name="MyDetails" />
+                </GroupBox>
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Background="LightSlateGray" VerticalAlignment="Top" Margin="3,0,0,0">
+                    <Label Height="30" ToolTip="Subtitle Gateway Service Status">Service Status:</Label>
+                    <Image x:Name="partname_service_status" Source="Resources/Images/StopService.png" Width="24"></Image>
+                </StackPanel>
+            </Grid>
+        </Grid>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <Border Style="{StaticResource SeparatorStyle2px}"/>
+            <Label x:Name="partname_adminversion" Height="30" ToolTip="SGA Version">v0.00</Label>       
+            <Border Style="{StaticResource SeparatorStyle2px}"/>
+            <Label x:Name="partname_creatorversion" Height="30" ToolTip="File SGA Version">c-.--</Label>
+        </StackPanel>
+    </Grid>
+</Window>
